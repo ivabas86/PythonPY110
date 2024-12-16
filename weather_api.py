@@ -1,5 +1,10 @@
+import json
+from http.client import HTTPResponse
+
 import requests
 from datetime import datetime
+
+from django.http import JsonResponse, HttpResponse
 
 # Словарь перевода значений направления ветра
 DIRECTION_TRANSFORM = {
@@ -23,31 +28,26 @@ DIRECTION_TRANSFORM = {
 }
 
 
-def current_weather(lat, lon):
-    """
-    Описание функции, входных и выходных переменных
-    """
-    token = '858944cb-71fd-4c75-93ba-8af3b9778936'  # Вставить ваш токен
-    url = f"https://api.weather.yandex.ru/v2/forecast?lat={lat}&lon={lon}"  # Если вдруг используете тариф «Погода на вашем сайте»
-    # то вместо forecast используйте informers. url = f"https://api.weather.yandex.ru/v2/informers?lat={lat}&lon={lon}"
-    headers = {"X-Yandex-API-Key": f"{token}"}
-    response = requests.get(url, headers=headers)
+def current_weather(lat=None,lon=None,city=None):
+    token = "ddc6cb704e3a4962901192455240412"
+    if lat and lon:
+        url = f'https://api.weatherapi.com/v1/current.json?key={token}&q= {lat},{lon}'
+        response = requests.get(url)
+
+    else:
+        params = {'key': token, 'q': city}
+        url = f'https://api.weatherapi.com/v1/current.json'
+        response = requests.get(url, params=params)
+    # print(response.text)
     data = response.json()
+    time_ = datetime.fromisoformat(data["current"]["last_updated"]).time()
+    date_ = '.'.join(list(reversed(str(datetime.fromisoformat(data["current"]["last_updated"]).date()).split('-'))))
+    # print(json.dumps(data, indent=4))
+    s = f'Город: {data["location"]["name"]}\n' \
+        f'Страна: {data["location"]["country"]}\n' \
+        f'Температура: {data["current"]["temp_c"]} град\n' \
+        f'Ветер: {data["current"]["wind_kph"]} км/ч\n' \
+        f'Ощущается: {data["current"]["feelslike_c"]} град\n' \
+        f'Время обновления:{time_} {date_}'
 
-    # Данная реализация приведена для тарифа «Тестовый», если у вас Тариф «Погода на вашем сайте», то закомментируйте пару строк указанных ниже
-    result = {
-        # 'city': data['location']['region','name','country'],  # Если используете Тариф «Погода на вашем сайте», то закомментируйте эту строку
-        'time': datetime.fromtimestamp(data['fact']['uptime']).strftime("%H:%M"),  # Если используете Тариф «Погода на вашем сайте», то закомментируйте эту строку
-        'temp': data['fact']['temp'],  # TODO Реализовать вычисление температуры из данных полученных от API
-        'feels_like_temp': data['fact']['feels_like'],  # TODO Реализовать вычисление ощущаемой температуры из данных полученных от API
-        'pressure': data['fact']['feels_like'],  # TODO Реализовать вычисление давления из данных полученных от API
-        'humidity': data['fact']['humidity'],  # TODO Реализовать вычисление влажности из данных полученных от API
-        'wind_speed': data['fact']['wind_speed'],  # TODO Реализовать вычисление скорости ветра из данных полученных от API
-        'wind_gust': data['fact']['wind_gust'],  # TODO Реализовать вычисление скорости порывов ветка из данных полученных от API
-        'wind_dir': DIRECTION_TRANSFORM.get(data['fact']['wind_dir']),  # Если используете Тариф «Погода на вашем сайте», то закомментируйте эту строку
-    }
-    return result
-
-
-if __name__ == "__main__":
-    print(current_weather(59.93, 30.31))  # Проверка работы для координат Санкт-Петербурга
+    return (s)
