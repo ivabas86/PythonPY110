@@ -1,6 +1,8 @@
 import requests
 import codecs
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
+from django.shortcuts import render
+from logic.services import view_in_cart, remove_from_cart, add_to_cart
 from store.models import DATABASE
 from logic.services import filtering_category
 
@@ -26,9 +28,10 @@ def product_(request):
 
 def shop_view(request):
     if request.method == 'GET':
-        with open('store/shop.html', encoding= 'utf-8') as f:
-            data = f.read()
-        return HttpResponse(data)
+        # with open('store/shop.html', encoding= 'utf-8') as f:
+        #     data = f.read()
+        # return HttpResponse(data)
+        return render(request, 'store/shop.html')
 
 def product_page_view(request, page):
     if request.method == 'GET':
@@ -45,4 +48,30 @@ def product_page_view(request, page):
                     data = f.read()
                 return HttpResponse(data)
 
+def cart_view(request):
+    if request.method == "GET":
+        data = view_in_cart()  # TODO Вызвать ответственную за это действие функцию
+        return JsonResponse(data, json_dumps_params={'ensure_ascii': False,
+                                                     'indent': 4})
 
+def cart_add_view(request, id_product):
+    if request.method == "GET":
+        result = add_to_cart(id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
+        if result:
+            return JsonResponse({"answer": "Продукт успешно добавлен в корзину"},
+                                json_dumps_params={'ensure_ascii': False})
+
+        return JsonResponse({"answer": "Неудачное добавление в корзину"},
+                            status=404,
+                            json_dumps_params={'ensure_ascii': False})
+
+def cart_del_view(request, id_product):
+    if request.method == "GET":
+        result = remove_from_cart(id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
+        if result:
+            return JsonResponse({"answer": "Продукт успешно удалён из корзины"},
+                                json_dumps_params={'ensure_ascii': False})
+
+        return JsonResponse({"answer": "Неудачное удаление из корзины"},
+                            status=404,
+                            json_dumps_params={'ensure_ascii': False})

@@ -10,7 +10,7 @@ from django.http import JsonResponse
 
 def my_view(request):
     if request.method == "GET":
-        data = current_weather(city='London')  # Результат работы функции current_weather
+        data = current_weather(city='Luga')  # Результат работы функции current_weather
         # А возвращаем объект JSON. Параметр json_dumps_params используется, чтобы передать ensure_ascii=False
         # как помните это необходимо для корректного отображения кириллицы
         return JsonResponse(data, safe = False, json_dumps_params={'ensure_ascii': False,

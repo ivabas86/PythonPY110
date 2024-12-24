@@ -29,7 +29,7 @@ DIRECTION_TRANSFORM = {
 
 
 def current_weather(lat=None,lon=None,city=None):
-    token = "ddc6cb704e3a4962901192455240412"
+    token = "a98a1ca923944aecb4f211406242212"
     if lat and lon:
         url = f'https://api.weatherapi.com/v1/current.json?key={token}&q= {lat},{lon}'
         response = requests.get(url)
