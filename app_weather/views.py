@@ -20,7 +20,7 @@ def weather_view(request):
         lat = request.GET.get('lat')
         lon = request.GET.get('lon')
         if lat and lon:
-            data = current_weather(lat=lat, lon = lon)
+            data = current_weather(lat=lat, lon = lon)# можно ввести 6 и 7
         else:
             data = current_weather(59.93, 30.31)
         return JsonResponse(data, safe = False, json_dumps_params={'ensure_ascii': False, 'indent': 4})
