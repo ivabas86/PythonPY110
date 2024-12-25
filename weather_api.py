@@ -43,11 +43,12 @@ def current_weather(lat=None,lon=None,city=None):
     time_ = datetime.fromisoformat(data["current"]["last_updated"]).time()
     date_ = '.'.join(list(reversed(str(datetime.fromisoformat(data["current"]["last_updated"]).date()).split('-'))))
     # print(json.dumps(data, indent=4))
-    s = f'Город: {data["location"]["name"]}\n' \
-        f'Страна: {data["location"]["country"]}\n' \
-        f'Температура: {data["current"]["temp_c"]} град\n' \
-        f'Ветер: {data["current"]["wind_kph"]} км/ч\n' \
-        f'Ощущается: {data["current"]["feelslike_c"]} град\n' \
+    s = [f'Город: {data["location"]["name"]}',
+        f'Страна: {data["location"]["country"]}',
+        f'Температура: {data["current"]["temp_c"]} град',
+        f'Ветер: {data["current"]["wind_kph"]} км/ч\n',
+        f'Ощущается: {data["current"]["feelslike_c"]} град',
         f'Время обновления:{time_} {date_}'
+         ]
 
-    return (s)
+    return s
