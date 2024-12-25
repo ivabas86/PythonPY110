@@ -43,12 +43,19 @@ def current_weather(lat=None,lon=None,city=None):
     time_ = datetime.fromisoformat(data["current"]["last_updated"]).time()
     date_ = '.'.join(list(reversed(str(datetime.fromisoformat(data["current"]["last_updated"]).date()).split('-'))))
     # print(json.dumps(data, indent=4))
-    s = [f'Город: {data["location"]["name"]}',
-        f'Страна: {data["location"]["country"]}',
-        f'Температура: {data["current"]["temp_c"]} град',
-        f'Ветер: {data["current"]["wind_kph"]} км/ч\n',
-        f'Ощущается: {data["current"]["feelslike_c"]} град',
-        f'Время обновления:{time_} {date_}'
-         ]
-
+    # s = [f'Город: {data["location"]["name"]}',
+    #     f'Страна: {data["location"]["country"]}',
+    #     f'Температура: {data["current"]["temp_c"]} град',
+    #     f'Ветер: {data["current"]["wind_kph"]} км/ч\n',
+    #     f'Ощущается: {data["current"]["feelslike_c"]} град',
+    #     f'Время обновления:{time_} {date_}'
+    #      ]
+    s = {
+        'Город': data["location"]["name"],
+         'Страна': data["location"]["country"],
+         'Температура': f'{data["current"]["temp_c"]} град',
+         'Ветер': f'{data["current"]["wind_kph"]}км/ч',
+         'Ощущается': f'{data["current"]["feelslike_c"]}град',
+         'Время обновления':f'{time_} {date_}'
+    }
     return s

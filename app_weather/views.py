@@ -13,7 +13,7 @@ def my_view(request):
         data = current_weather(city='Luga')  # Результат работы функции current_weather
         # А возвращаем объект JSON. Параметр json_dumps_params используется, чтобы передать ensure_ascii=False
         # как помните это необходимо для корректного отображения кириллицы
-        return JsonResponse(data, safe = False, json_dumps_params={'ensure_ascii': False,
+        return JsonResponse(data, safe = True, json_dumps_params={'ensure_ascii': False,
                                                      'indent': 4})
 def weather_view(request):
     if request.method == "GET":
@@ -23,7 +23,7 @@ def weather_view(request):
             data = current_weather(lat=lat, lon = lon)# можно ввести 6 и 7
         else:
             data = current_weather(59.93, 30.31)
-        return JsonResponse(data, safe = False, json_dumps_params={'ensure_ascii': False, 'indent': 4})
+        return JsonResponse(data, safe = True, json_dumps_params={'ensure_ascii': False, 'indent': 4})
 
 
 # def current_weather(lat, lon1):
