@@ -31,7 +31,7 @@ def shop_view(request):
         # with open('store/shop.html', encoding= 'utf-8') as f:
         #     data = f.read()
         # return HttpResponse(data)
-        return render(request, 'store/shop.html')
+        return render(request, 'store/shop.html', context= {'products': DATABASE.values()})
 
 def product_page_view(request, page):
     if request.method == 'GET':
