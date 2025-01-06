@@ -2,6 +2,8 @@ import requests
 import codecs
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
 from django.shortcuts import render
+from unicodedata import category
+
 from logic.services import view_in_cart, remove_from_cart, add_to_cart
 from store.models import DATABASE
 from logic.services import filtering_category
@@ -50,15 +52,21 @@ def product_page_view(request, page):
         if isinstance (page, str):
             for prod in DATABASE.values():
                 if prod ['html'] == page:
+                    category_product = [el for el in filtering_category(DATABASE, category_key= prod['category']) if el['name'] != prod['name']]
+
                     # with open (f'store/products/{page}.html', encoding= 'utf-8') as f:
                     #     data = f.read()
-                    return render(request, "store/product.html", context={"product": prod})
+                    return render(request, "store/product.html", context={"product": prod,
+                                                                          "category_product": category_product[:5]})
         elif isinstance(page, int):
             prod = DATABASE.get(str(page))
             if prod:
+                category_product = [el for el in filtering_category(DATABASE, category_key=prod['category'])
+                                    if el['name'] != prod['name']]
                 # with open(f'store/products/{prod["html"]}.html', encoding= 'utf-8') as f:
                 #     data = f.read()
-                return render(request, "store/product.html", context={"product": prod})
+                return render(request, "store/product.html", context={"product": prod,
+                                                                      "category_product": category_product[:5]})
         return HttpResponse(status=404)
 def cart_view(request):
     if request.method == "GET":
