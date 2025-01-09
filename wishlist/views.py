@@ -59,7 +59,6 @@ def wishlist_add_json(request, id_product: str):
         if result:
             return JsonResponse({"answer": "Продукт успешно добавлен в избранное"},
                                 json_dumps_params={'ensure_ascii': False})
-
         return JsonResponse({"answer": "Неудачное добавление в избранное"},
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
@@ -86,15 +85,9 @@ def wishlist_json(request):
     if request.method == "GET":
         current_user = get_user(request).username  # from django.contrib.auth import get_user
         data = view_in_wishlist(request)[current_user]  # TODO Вызвать ответственную за это действие функцию
-        if request.GET.get('format') == 'json':
+        if data:
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False,
-                                                         'indent': 4})
-        products = []  # Список продуктов
-        for id_product in data.get('products'):
-            product = DATABASE[id_product]  # 1. Получите информацию о продукте из DATABASE по его product_id. product будет словарём
-            # product['count'] = count  # 2. в словарь product под ключом "quantity" запишите текущее значение товара в корзине
-            # product['price_total'] = round(count * product['price_after'],
-            #                            2)  # добавление общей цены позиции с ограничением в 2 знака
-        # 3. добавьте product в список products
-            products.append(product)
-        return render(request, "wishlist/wishlist.html", context={"products": products})
+                                                 'indent': 4})
+        return JsonResponse({"answer": "Пользователь не авторизован"},
+                            status=404,
+                            json_dumps_params={'ensure_ascii': False})

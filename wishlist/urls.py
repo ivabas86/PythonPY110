@@ -16,5 +16,5 @@ urlpatterns = [
     path('product/<int:page>', product_page_view),
     path('wishlist/api/add/<str:id_product>', wishlist_add_json),
     path('wishlist/api/del/<str:id_product>', wishlist_del_json),
-    path('wishlist/api', wishlist_json),
+    path('wishlist/api/', wishlist_json),
 ]
