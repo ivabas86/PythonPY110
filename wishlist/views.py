@@ -10,8 +10,7 @@ from store.models import DATABASE
 @login_required(login_url='login:login_view')
 def wishlist_view(request):
     if request.method == "GET":
-        current_user = get_user(request).username
-        ...  # TODO прописать отображение избранного. Путь до HTML - wishlist/wishlist.html
+        current_user = get_user(request).username # TODO прописать отображение избранного. Путь до HTML - wishlist/wishlist.html
         data = view_in_wishlist(request)[current_user]  # TODO Вызвать ответственную за это действие функцию
         if request.GET.get('format') == 'json':
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False,
@@ -55,7 +54,7 @@ def wishlist_add_json(request, id_product: str):
     Добавление продукта в избранное и возвращение информации об успехе или неудаче в JSON
     """
     if request.method == "GET":
-        result = add_user_to_wishlist(request,id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
+        result = add_to_wishlist(request,id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
             return JsonResponse({"answer": "Продукт успешно добавлен в избранное"},
                                 json_dumps_params={'ensure_ascii': False})

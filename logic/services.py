@@ -194,7 +194,7 @@ def remove_from_wishlist(request,id_product: str) -> bool:
     if id_product not in cart['products']:
         return False
     if id_product in cart['products']:
-        cart['products'].remove(id_product)
+        cart['products'].pop(id_product)
         with open('wishlist.json', mode= 'w', encoding='utf-8') as f:
             json.dump(wishlist_users,f)
         return True
