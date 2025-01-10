@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import get_user
 from logic.services import view_in_wishlist, add_to_wishlist, remove_from_wishlist, add_user_to_wishlist
 from store.models import DATABASE
@@ -41,12 +41,8 @@ def wishlist_del_view(request, id_product):
     if request.method == "GET":
         result = remove_from_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
-            return JsonResponse({"answer": "Продукт успешно удалён из корзины"},
-                                json_dumps_params={'ensure_ascii': False})
-
-        return JsonResponse({"answer": "Неудачное удаление из корзины"},
-                            status=404,
-                            json_dumps_params={'ensure_ascii': False})
+            return redirect("wishlist:wishlist_view")  # TODO Вернуть перенаправление на корзину
+        return HttpResponseNotFound("Неудачное удаление из корзины")
 
 
 def wishlist_add_json(request, id_product: str):
@@ -70,7 +66,7 @@ def wishlist_del_json(request, id_product: str):
     if request.method == "GET":
         result = remove_from_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
-            return JsonResponse({"answer": "Продукт успешно удалён из корзины"},
+            return JsonResponse({"answer": "Продукт успешно 7удалён из корзины"},
                                 json_dumps_params={'ensure_ascii': False})
         return JsonResponse({"answer": "Неудачное удаление из корзины"},
                             status=404,
