@@ -162,10 +162,11 @@ def add_to_wishlist(request, id_product: str) -> bool:
     # if id_product in cart['products'] and id_product in DATABASE:
     #     cart['products'][id_product] += 1
 
-    if id_product not in cart['products'] and id_product in DATABASE:
-        cart['products'][id_product] = 1
-        with open('wishlist.json', mode = 'w', encoding='utf-8') as  f:
-            json.dump(wishlist_users,f)
+    if id_product in DATABASE:
+        if id_product not in cart['products'] and id_product in DATABASE:
+            cart['products'][id_product] = 1
+        with open('wishlist.json', mode='w', encoding='utf-8') as f:
+            json.dump(wishlist_users, f)
         return True
     return False
     # поэтому, чтобы загрузить данные из корзины, не нужно заново писать код.
