@@ -71,12 +71,13 @@ def add_to_cart(request, id_product: str) -> bool:
      # TODO Помните, что у вас есть уже реализация просмотра корзины,
     cart_users = view_in_cart(request)
     cart = cart_users[get_user(request).username]
-    if id_product in cart['products'] and id_product in DATABASE:
-        cart['products'][id_product] += 1
-    elif id_product not in cart['products'] and id_product in DATABASE:
-        cart['products'][id_product] = 1
-        with open('cart.json', mode = 'w', encoding='utf-8') as  f:
-            json.dump(cart_users,f)
+    if id_product in DATABASE:
+        if id_product in cart['products']:
+            cart['products'][id_product] += 1
+        elif id_product not in cart['products'] and id_product in DATABASE:
+            cart['products'][id_product] = 1
+        with open('cart.json', mode='w', encoding='utf-8') as f:
+            json.dump(cart_users, f)
         return True
     return False
     # поэтому, чтобы загрузить данные из корзины, не нужно заново писать код.
