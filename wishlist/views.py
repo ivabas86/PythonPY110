@@ -47,7 +47,7 @@ def wishlist_del_view(request, id_product):
         return HttpResponseNotFound("Неудачное удаление из корзины")
 
 
-@login_required(login_url='login:login_view')
+# @login_required(login_url='login:login_view')
 def wishlist_add_json(request, id_product: str):
     """
     Добавление продукта в избранное и возвращение информации об успехе или неудаче в JSON
@@ -62,7 +62,7 @@ def wishlist_add_json(request, id_product: str):
                             json_dumps_params={'ensure_ascii': False})
 
 
-@login_required(login_url='login:login_view')
+# @login_required(login_url='login:login_view')
 def wishlist_del_json(request, id_product: str):
     """
     Удаление продукта из избранного и возвращение информации об успехе или неудаче в JSON

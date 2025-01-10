@@ -156,19 +156,36 @@ def view_in_wishlist(request) -> dict:  # Уже реализовано, не н
     return cart
 
 
+# def add_to_wishlist(request, id_product: str) -> bool:
+#     wishlist_users = view_in_wishlist(request)
+#     cart = wishlist_users[get_user(request).username]
+#     # if id_product in cart['products'] and id_product in DATABASE:
+#     #     cart['products'][id_product] += 1
+#
+#     if id_product in DATABASE:
+#         if id_product not in cart['products']:
+#             cart['products'].append(id_product)
+#         with open('wishlist.json', mode='w', encoding='utf-8') as f:
+#             json.dump(wishlist_users, f)
+#         return True
+#     return False
+
 def add_to_wishlist(request, id_product: str) -> bool:
     wishlist_users = view_in_wishlist(request)
-    cart = wishlist_users[get_user(request).username]
-    # if id_product in cart['products'] and id_product in DATABASE:
-    #     cart['products'][id_product] += 1
-
-    if id_product in DATABASE:
-        if id_product not in cart['products']:
-            cart['products'].append(id_product)
-        with open('wishlist.json', mode='w', encoding='utf-8') as f:
-            json.dump(wishlist_users, f)
-        return True
+    user = get_user(request).username
+    # print(get_user(request).username)
+    if user:
+        cart = wishlist_users[get_user(request).username]
+        # if id_product in cart['products'] and id_product in DATABASE:
+        #     cart['products'][id_product] += 1
+        if id_product in DATABASE:
+            if id_product not in cart['products']:
+                cart['products'].append(id_product)
+            with open('wishlist.json', mode='w', encoding='utf-8') as f:
+                json.dump(wishlist_users, f)
+            return True
     return False
+
     # поэтому, чтобы загрузить данные из корзины, не нужно заново писать код.
 
     # ! Обратите внимание, что в переменной cart находится словарь с ключом products.
@@ -186,18 +203,34 @@ def add_to_wishlist(request, id_product: str) -> bool:
 
 
 
+# def remove_from_wishlist(request,id_product: str) -> bool:
+#
+#     wishlist_users = view_in_wishlist(request)
+#     cart = wishlist_users[get_user(request).username]
+#
+#     if id_product not in cart['products']:
+#         return False
+#     if id_product in cart['products']:
+#         cart['products'].remove(id_product)
+#         with open('wishlist.json', mode= 'w', encoding='utf-8') as f:
+#             json.dump(wishlist_users,f)
+#         return True
+
+
 def remove_from_wishlist(request,id_product: str) -> bool:
 
     wishlist_users = view_in_wishlist(request)
-    cart = wishlist_users[get_user(request).username]
+    user = get_user(request).username
 
-    if id_product not in cart['products']:
-        return False
-    if id_product in cart['products']:
-        cart['products'].remove(id_product)
-        with open('wishlist.json', mode= 'w', encoding='utf-8') as f:
-            json.dump(wishlist_users,f)
-        return True
+    if user:
+        cart = wishlist_users[get_user(request).username]
+        if id_product in cart['products']:
+            cart['products'].remove(id_product)
+            with open('wishlist.json', mode= 'w', encoding='utf-8') as f:
+                json.dump(wishlist_users,f)
+            return True
+    return False
+
 
 def add_user_to_wishlist(request, username: str) -> None:
 
