@@ -135,7 +135,7 @@ def add_user_to_cart(request, username: str) -> None:
 
     if not cart:  # Если пользователя до настоящего момента не было в корзине, то создаём его и записываем в базу
         with open('cart.json', mode='w', encoding='utf-8') as f:
-            cart_users[username] = {'products': {}}
+            cart_users[username] = {'products': []}
             json.dump(cart_users, f)
 
 #
@@ -163,8 +163,8 @@ def add_to_wishlist(request, id_product: str) -> bool:
     #     cart['products'][id_product] += 1
 
     if id_product in DATABASE:
-        if id_product not in cart['products'] and id_product in DATABASE:
-            cart['products'][id_product] = 1
+        if id_product not in cart['products']:
+            cart['products'].append(id_product)
         with open('wishlist.json', mode='w', encoding='utf-8') as f:
             json.dump(wishlist_users, f)
         return True
@@ -194,7 +194,7 @@ def remove_from_wishlist(request,id_product: str) -> bool:
     if id_product not in cart['products']:
         return False
     if id_product in cart['products']:
-        cart['products'].pop(id_product)
+        cart['products'].remove(id_product)
         with open('wishlist.json', mode= 'w', encoding='utf-8') as f:
             json.dump(wishlist_users,f)
         return True

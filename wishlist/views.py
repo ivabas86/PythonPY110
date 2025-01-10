@@ -25,18 +25,20 @@ def wishlist_view(request):
             products.append(product)
         return render(request, "wishlist/wishlist.html", context={"products": products})
 
+# @login_required(login_url='login:login_view')
+# def wishlist_add_view(request, id_product):
+#     if request.method == "GET":
+#         result = add_to_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
+#         if result:
+#             return JsonResponse({"answer": "Продукт успешно добавлен в избранное"},
+#                                 json_dumps_params={'ensure_ascii': False})
+#
+#         return JsonResponse({"answer": "Неудачное добавление в избранное"},
+#                             status=404,
+#                             json_dumps_params={'ensure_ascii': False})
+
+
 @login_required(login_url='login:login_view')
-def wishlist_add_view(request, id_product):
-    if request.method == "GET":
-        result = add_to_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
-        if result:
-            return JsonResponse({"answer": "Продукт успешно добавлен в избранное"},
-                                json_dumps_params={'ensure_ascii': False})
-
-        return JsonResponse({"answer": "Неудачное добавление в избранное"},
-                            status=404,
-                            json_dumps_params={'ensure_ascii': False})
-
 def wishlist_del_view(request, id_product):
     if request.method == "GET":
         result = remove_from_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
@@ -45,6 +47,7 @@ def wishlist_del_view(request, id_product):
         return HttpResponseNotFound("Неудачное удаление из корзины")
 
 
+@login_required(login_url='login:login_view')
 def wishlist_add_json(request, id_product: str):
     """
     Добавление продукта в избранное и возвращение информации об успехе или неудаче в JSON
@@ -59,6 +62,7 @@ def wishlist_add_json(request, id_product: str):
                             json_dumps_params={'ensure_ascii': False})
 
 
+@login_required(login_url='login:login_view')
 def wishlist_del_json(request, id_product: str):
     """
     Удаление продукта из избранного и возвращение информации об успехе или неудаче в JSON
@@ -72,7 +76,7 @@ def wishlist_del_json(request, id_product: str):
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
 
-
+@login_required(login_url='login:login_view')
 def wishlist_json(request):
     """
     Просмотр всех продуктов в избранном для пользователя и возвращение этого в JSON

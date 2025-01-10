@@ -41,10 +41,10 @@
 						        	<h3>{{product.name}}</h3>
 						        	<p>{{product.description}}</p>
 						        </td>
+								  <td class="price">
 						        {% if product.discount %}
-						        <td class="price"><del>{{product.price_before}}</del>
-                                {% endif %}
-                                    {{product.price_after}}</td>
+								  <del>{{product.price_before}}</del>
+                                {% endif %} {{product.price_after}}</td>
 						      </tr><!-- END TR-->
                             {% endfor%}
 
